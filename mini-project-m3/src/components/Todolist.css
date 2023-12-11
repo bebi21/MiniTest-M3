@@ -226,6 +226,17 @@ li {
 .settings li i {
   padding-right: 8px;
 }
+.loading {
+  position: absolute;
+  width: 100vw;
+  height: 110vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: -139px;
+  z-index: 99;
+}
 
 @media (max-width: 400px) {
   body {

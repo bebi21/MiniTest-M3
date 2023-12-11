@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./Todolist.css";
 import axios from "axios";
 import { Outlet, Link } from "react-router-dom";
+import Loading from "./Loading";
 
 export default function Todolist() {
   const [toDoList, settoDoList] = useState([]);
@@ -13,17 +14,27 @@ export default function Todolist() {
   const [check, setCheck] = useState(true);
   const [checkRender, setCheckRender] = useState(false);
   const [compalete, setCompalate] = useState(0);
+  const [loading, setLoading] = useState(false);
 
   const takeData = async () => {
-    const dataServer = await axios.get(
-      "http://localhost:5200/api/v1/todos?per_page=4"
-    );
+    setLoading(true);
+    try {
+      const dataServer = await axios.get(
+        "http://localhost:5200/api/v1/todos?per_page=4"
+      );
 
-    settoDoList(dataServer.data.render);
-    let compaleteRen = dataServer.data.render.filter(
-      (item) => item.completed == false
-    );
-    setCompalate(compaleteRen.length);
+      settoDoList(dataServer.data.render);
+      let compaleteRen = dataServer.data.render.filter(
+        (item) => item.completed == false
+      );
+      setCompalate(compaleteRen.length);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setTimeout(() => {
+        setLoading(false);
+      }, 700);
+    }
   };
   useEffect(() => {
     takeData();
@@ -113,15 +124,16 @@ export default function Todolist() {
     setCheckRender(!checkRender);
   };
 
-  //   const [pending, setPending] = useState();
-  //   const handlePending = () => {
-  //     let newRender = toDoList.filter((item) => item.completed === false);
-  //     setPending(newRender);
-  //   };
+  const [pending, setPending] = useState();
+  const handlePending = () => {
+    let newRender = toDoList.filter((item) => item.completed === false);
+    setPending(newRender);
+  };
 
   return (
     <>
       {" "}
+      {loading ? <Loading /> : <></>}
       <div className="wrapper">
         <div className="task-input">
           <ion-icon name="create-outline" />

@@ -1,16 +1,26 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 export default function All() {
-  const [checkRender, setCheckRender] = useState(false);
   const [toDoList, settoDoList] = useState([]);
+  const [newToDo, setNewToDo] = useState({
+    userId: 11,
+    title: "",
+    completed: false,
+  });
+  const [check, setCheck] = useState(true);
+  const [checkRender, setCheckRender] = useState(false);
+  const [compalete, setCompalate] = useState(0);
+
   const takeData = async () => {
-    const dataServer = await axios.get("http://localhost:5200/api/v1/todos");
-    const dataUser1 = dataServer.data.filter((item) => item.userId == 11);
-    settoDoList(dataUser1);
+    const dataServer = await axios.get(
+      "http://localhost:5200/api/v1/todos?per_page=4"
+    );
+    settoDoList(dataServer.data.allToDo);
   };
   useEffect(() => {
     takeData();
   }, [checkRender]);
+
   // Xoa
   const handleDelete = async (id) => {
     const newData = await axios.delete(
